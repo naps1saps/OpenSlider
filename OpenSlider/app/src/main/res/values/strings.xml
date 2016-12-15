@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Open Slider</string>
+    <string name="banner_ad_unit_id">ca-app-pub-8646202503635771/8764386209</string>
+
+    <!---Terms-->
+    <string name="invert">Invert</string>
+    <string name="pan">Pan</string>
+    <string name="tilt">Tilt</string>
+    <string name="slide">Slide</string>
+    <string name="return_center">Return</string>
+
+    <!--Navigation Window Strings-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="live_control_title">Live Control</string>
+    <string name="easy_motion_title">Easy Motion</string>
+    <string name="about_title">About Open Slider</string>
+    <string name="settings_title">Settings</string>
+    <string name="donate_title">Donate</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="share_subject">Check out the Open Slider project!</string>
+    <string name="share_body">The Open Slider project is an open source Android app and build instructions for a mechanical camera slider.</string>
+    <string name="share_via">Share via</string>
+
+    <!--About Open Slider Screen-->
+    <string name="about_TV1">Thank you for installing Open Slider.</string>
+    <string name="about_TV2">Open Slider is a project created by Greg Deeth to make it easy to build and control a camera slider from your PC or Android device while remaining open source so that anyone can customize the way it works for their own needs.  A basic motorized slider can be built for under $200 and does not need any special tools or advanced knowledge.  If you have a DIY 3D printer, you will be familiar with the required parts.</string>
+    <string name="about_TV3">Being a lone developer on the side, support is nearly non existent.  Please take advantage of the forum located in the menu to ask questions and post comments.</string>
+    <string name="about_TV4">If you would like to know more about this project, please click on the link below for videos and documentation.</string>
+
+    <!--Donate Screen-->
+    <string name="donate_TV1">I\'ve worked hard on this project and if you feel it\'s a valuable tool, please consider a donation.</string>
+    <string name="donate_TV2">Purchasing an Open Slider decal from my store is another way to show your support for this project.</string>
+
+    <!--Live Control Screen-->
+    <string name="live_damp_start">Dampening Start:</string>
+    <string name="live_damp_end">Dampening End:</string>
+
+    <!--Settings Screen-->
+    <string name="settings_bluetooth_title">Bluetooth Settings</string>
+    <string name="settings_paired_devices">Get Paired Devices</string>
+
+    <!--Error Messages-->
+    <string name="error_no_bluetooth_adapter">Your device does not support Bluetooth.  Bluetooth is required for this app to work.</string>
+    <string name="error_no_paired_devices">No paired devices were found.  Please open your bluetooth settings and pair a device.</string>
+</resources>

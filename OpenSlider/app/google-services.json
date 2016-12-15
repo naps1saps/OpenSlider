@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "862444066738",
+    "firebase_url": "https://open-slider-96c19.firebaseio.com",
+    "project_id": "open-slider-96c19",
+    "storage_bucket": "open-slider-96c19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862444066738:android:d931e5cefe6c82c6",
+        "android_client_info": {
+          "package_name": "com.epicdecals.openslider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862444066738-3oiom46lck3bcr41hiq80kku3m3r13cs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrm14TnzC90iw1wmg00aaCfnuK4EF16mE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

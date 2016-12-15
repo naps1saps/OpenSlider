@@ -1,0 +1,238 @@
+package com.epicdecals.openslider;
+
+import android.app.Fragment;
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
+/**
+ * Created by gdeeth on 11/13/2016.
+ */
+
+public class LiveControls extends android.support.v4.app.Fragment{
+    AdView mAdView;
+    View rootview;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootview = inflater.inflate(R.layout.live_control, container, false);
+
+        //Creating listeners: Define objects
+        SeekBar dampStart = (SeekBar) rootview.findViewById(R.id.sb_damp_start);
+        SeekBar dampEnd = (SeekBar) rootview.findViewById(R.id.sb_damp_end);
+        ImageView sliderWindow = (ImageView) rootview.findViewById(R.id.iv_slider);
+        ImageView joystickWindow = (ImageView) rootview.findViewById(R.id.iv_joystick);
+
+
+
+        //Create listeners
+        joystickWindow.setOnTouchListener(new View.OnTouchListener() {
+            float dx=0,dy=0,x=0,y=0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event){
+                ImageView joystickPosition = (ImageView) rootview.findViewById(R.id.iv_joystick_position);
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        x = event.getX();
+                        y = event.getY();
+                        dx = x - joystickPosition.getX();
+                        dy = y - joystickPosition.getY();
+                    }
+                    break;
+                    case MotionEvent.ACTION_MOVE: {
+                        joystickPosition.setX(event.getX() - dx);
+                        joystickPosition.setY(event.getY() - dy);
+                    }
+                    break;
+                    case MotionEvent.ACTION_UP: {
+                        centerJoystick();
+                    }
+                    case MotionEvent.ACTION_OUTSIDE: {
+                        centerObjectToParent(rootview.findViewById(R.id.iv_joystick), rootview.findViewById(R.id.iv_joystick_position));
+                    }
+                    break;
+                }
+                return true;
+            }
+        });
+
+        sliderWindow.setOnTouchListener(new View.OnTouchListener() {
+            float dx=0,dy=0,x=0,y=0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView sliderPosition = (ImageView) rootview.findViewById(R.id.iv_slider_position);
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        x = event.getX();
+                        dx = x - sliderPosition.getX();
+                    }
+                    break;
+                    case MotionEvent.ACTION_MOVE: {
+                        sliderPosition.setX(event.getX() - dx);
+                    }
+                    break;
+                    case MotionEvent.ACTION_UP: {
+                        centerObjectToParent(rootview.findViewById(R.id.iv_slider), rootview.findViewById(R.id.iv_slider_position));
+                    }
+                }
+                return true;
+            }
+        });
+
+        dampStart.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar dampStart, int progress, boolean fromUser) {
+                TextView dampStartText = (TextView) rootview.findViewById(R.id.tv_damp_start);
+                dampStartText.setText(getResources().getString(R.string.live_damp_start) + " " + String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar dampStart) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar dampStart) {
+
+            }
+        });
+
+        dampEnd.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar dampEnd, int progress, boolean fromUser) {
+                TextView dampEndText = (TextView) rootview.findViewById(R.id.tv_damp_end);
+                dampEndText.setText(getResources().getString(R.string.live_damp_end) + " " + String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar dampEtart) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar dampEtart) {
+
+            }
+        });
+
+        //Admob initialization
+        // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
+        // values/strings.xml.
+        mAdView = (AdView) rootview.findViewById(R.id.ad_view);
+        // Create an ad request. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        // Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
+
+        return rootview;
+    }
+
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent px equivalent to dp depending on device density
+     */
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
+    }
+
+    //Get system's status bar height
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    //Centers the position marker on the slider graphic
+    public void centerSlider(){
+        ImageView sliderPosition = (ImageView) rootview.findViewById(R.id.iv_slider_position);
+        int posXY[] = new int[2];
+        rootview.findViewById(R.id.iv_slider).getLocationOnScreen(posXY);
+        int centerX = posXY[0] + ((rootview.findViewById(R.id.iv_slider)).getWidth() / 2);
+        int centerY = posXY[1] + ((rootview.findViewById(R.id.iv_slider)).getHeight() / 2);
+        sliderPosition.setX(centerX - (rootview.findViewById(R.id.iv_slider_position).getWidth() / 2));
+        sliderPosition.setY(centerY - getStatusBarHeight() - convertDpToPixel(60, rootview.getContext()) - (rootview.findViewById(R.id.iv_slider_position).getHeight() / 2));
+    }
+
+    //Centers the position marker on the joystick graphic
+    public void centerJoystick(){
+        ImageView joystickPosition = (ImageView) rootview.findViewById(R.id.iv_joystick_position);
+        int posXY[] = new int[2];
+        rootview.findViewById(R.id.iv_joystick).getLocationInWindow(posXY);
+        int centerX = posXY[0] + ((rootview.findViewById(R.id.iv_joystick)).getWidth() / 2);
+        int centerY = posXY[1] + ((rootview.findViewById(R.id.iv_joystick)).getHeight() / 2);
+        joystickPosition.setX(centerX - (rootview.findViewById(R.id.iv_joystick_position).getWidth() / 2));
+        joystickPosition.setY(centerY - getStatusBarHeight() - convertDpToPixel(60, rootview.getContext()) - (rootview.findViewById(R.id.iv_joystick_position).getHeight() / 2));
+        //centerObjectToParent(rootview.findViewById(R.id.iv_joystick), 24);
+    }
+
+    public void centerObjectToParent(View parent, View child){
+        //ImageView joystickPosition = (ImageView) rootview.findViewById(R.id.iv_joystick_position);
+        int posXY[] = new int[2];
+        parent.getLocationInWindow(posXY);
+        int centerX = posXY[0] + (parent.getWidth() / 2);
+        int centerY = posXY[1] + (parent.getHeight() / 2);
+        child.setX(centerX - (child.getWidth() / 2));
+        child.setY(centerY - getStatusBarHeight() - convertDpToPixel(60, rootview.getContext()) - (child.getHeight() / 2));
+    }
+
+    /** Called when leaving the activity */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /** Called when returning to the activity */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    /** Called before the activity is destroyed */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+
+}

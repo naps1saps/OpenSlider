@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/grp1" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_live_control"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Live Control" />
+        <item
+            android:id="@+id/nav_easy_motion"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Easy Motion" />
+
+    </group>
+
+    <group android:id="@+id/grp2" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_content_main"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="About Open Slider" />
+
+    </group>
+
+    <group android:id="@+id/grp3" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_donate"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Donate" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share"
+            android:actionProviderClass=
+                "android.widget.ShareActionProvider"/>
+
+    </group>
+
+
+</menu>
