@@ -8,6 +8,7 @@
     <string name="tilt">Tilt</string>
     <string name="slide">Slide</string>
     <string name="return_center">Return</string>
+    <string name="NONE">None</string>
 
     <!--Navigation Window Strings-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -39,10 +40,14 @@
     <string name="live_damp_end">Dampening End:</string>
 
     <!--Settings Screen-->
-    <string name="settings_bluetooth_title">Bluetooth Settings</string>
-    <string name="settings_paired_devices">Get Paired Devices</string>
+    <string name="SETTINGS_BT_TITLE">Bluetooth Settings</string>
+    <string name="SETTINGS_BT_ADDRESS_TO_USE">BT Device to Use:</string>
+    <string name="settings_paired_devices">Get List of Paired Devices</string>
+    <string name="SETTINGS_BT_ADDRESS_SAVED">Bluetooth Device has been Saved</string>
 
     <!--Error Messages-->
+    <string name="ERROR_GENERIC">There was a Problem...</string>
     <string name="error_no_bluetooth_adapter">Your device does not support Bluetooth.  Bluetooth is required for this app to work.</string>
-    <string name="error_no_paired_devices">No paired devices were found.  Please open your bluetooth settings and pair a device.</string>
+    <string name="error_no_paired_devices">No paired devices were found.  Please open your device\'s bluetooth settings and pair a device.</string>
+    <string name="ERROR_NO_DEVICE_SAVED">Open Slider does not know what Bluetooth device it should use.  Please select one in SETTINGS.</string>
 </resources>

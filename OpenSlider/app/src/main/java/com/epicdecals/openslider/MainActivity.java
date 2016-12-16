@@ -1,5 +1,6 @@
 package com.epicdecals.openslider;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -31,28 +32,18 @@ import android.widget.Toast;
 
 import java.util.Set;
 
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private AdView mAdView;
-    /*SeekBar damp_start;
-    SeekBar damp_end;*/
 
     private BluetoothAdapter myBluetooth = null;
-    //private Set<BluetoothDevice> pairedDevices;
-
-    //public BluetoothAdapter getMyBluetooth(){return myBluetooth;}
-    //public void setMyBluetooth(BluetoothAdapter BT){myBluetooth = BT;}
-    //public Set getPairedDevices(){return pairedDevices;}
-    //public void setPairedDevices(Set set){pairedDevices = set;}
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         mAdView.loadAd(adRequest);
         ///////////////////////////END AD MOB INIT
 
-        ///////////////////////////START BLUETOOTH INIT
+        ///////////////////////////Check Device has BT
         //if the device has bluetooth
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
@@ -92,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             //Show a message that the device has no bluetooth adapter
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_bluetooth_adapter), Toast.LENGTH_LONG).show();
 
-            //finish apk
+            //Close APP
             finish();
         }
         else if(!myBluetooth.isEnabled())
@@ -101,8 +92,10 @@ public class MainActivity extends AppCompatActivity
             Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnBTon,1);
         }
-        ///////////////////////////END BLUETOOTH INIT
+        ///////////////////////////END Check Device has BT
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -248,5 +241,4 @@ public class MainActivity extends AppCompatActivity
         }
         super.onDestroy();
     }
-
 }

@@ -1,11 +1,16 @@
 package com.epicdecals.openslider;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +43,26 @@ public class LiveControls extends android.support.v4.app.Fragment{
         SeekBar dampEnd = (SeekBar) rootview.findViewById(R.id.sb_damp_end);
         ImageView sliderWindow = (ImageView) rootview.findViewById(R.id.iv_slider);
         ImageView joystickWindow = (ImageView) rootview.findViewById(R.id.iv_joystick);
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String btAddress = sharedPref.getString("btDeviceAddress", "");
+
+        if(btAddress == "") {
+            new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.ERROR_GENERIC)
+                    .setMessage(R.string.ERROR_NO_DEVICE_SAVED)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+
+
+
 
 
 

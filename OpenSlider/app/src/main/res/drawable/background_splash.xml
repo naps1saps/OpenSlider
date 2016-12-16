@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fill the background with a solid color -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#E53535"
+                android:endColor="#000000"
+                android:type="radial"
+                android:gradientRadius="400dp"
+
+                />
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/open_slider_icon"
+            android:gravity = "center"/>
+    </item>
+
+</layer-list>
