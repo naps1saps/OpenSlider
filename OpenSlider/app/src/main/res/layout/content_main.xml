@@ -34,7 +34,7 @@
                     android:fontFamily="sans-serif"
                     android:paddingBottom="10dp"
                     android:text="@string/about_TV1"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="normal|bold"
                     android:typeface="sans" />
@@ -48,7 +48,7 @@
                     android:fontFamily="monospace"
                     android:paddingBottom="10dp"
                     android:text="@string/about_TV2"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/white"
                     android:textSize="17sp" />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:fontFamily="monospace"
                     android:paddingBottom="10dp"
                     android:text="@string/about_TV3"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/white"
                     android:textSize="17sp" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:fontFamily="monospace"
                     android:paddingBottom="10dp"
                     android:text="@string/about_TV4"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/white"
                     android:textSize="17sp" />
 
             </GridLayout>

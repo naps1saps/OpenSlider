@@ -6,23 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/layout_joystick"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:srcCompat="@drawable/joystick3"
-        android:id="@+id/iv_joystick"
+        android:background="@drawable/joystick3"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"/>
-
-    <ImageView
-        ads:srcCompat="@drawable/ball"
-        android:id="@+id/iv_joystick_position"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_alignBottom="@+id/iv_joystick"
-        android:layout_alignLeft="@+id/iv_joystick"
-        android:layout_marginBottom="5dp"
-        android:layout_centerInParent="false" />
 
     <GridLayout
         android:layout_height="wrap_content"

@@ -21,6 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
+import android.widget.RelativeLayout;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -33,6 +37,16 @@ public class LiveControls extends android.support.v4.app.Fragment{
     AdView mAdView;
     View rootview;
 
+    /////////////////////////////joystick////////////////////////
+    RelativeLayout layout_joystick;
+    ImageView image_joystick, image_border;
+    TextView textView1, textView2, textView3, textView4, textView5;
+
+    JoyStickClass js;
+    //////////////////////////////end joystick///////////////////
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +56,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
         SeekBar dampStart = (SeekBar) rootview.findViewById(R.id.sb_damp_start);
         SeekBar dampEnd = (SeekBar) rootview.findViewById(R.id.sb_damp_end);
         ImageView sliderWindow = (ImageView) rootview.findViewById(R.id.iv_slider);
-        ImageView joystickWindow = (ImageView) rootview.findViewById(R.id.iv_joystick);
+        RelativeLayout joystickWindow = (RelativeLayout) rootview.findViewById(R.id.layout_joystick);
 
         SharedPreferences sharedPref = getContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         String btAddress = sharedPref.getString("btDeviceAddress", "");
@@ -62,10 +76,51 @@ public class LiveControls extends android.support.v4.app.Fragment{
 
 
 
+        ////////////////////////////////joystick/////////////////////////
+        /*textView1 = (TextView)rootview.findViewById(R.id.textView1);
+        textView2 = (TextView)rootview.findViewById(R.id.textView2);
+        textView3 = (TextView)rootview.findViewById(R.id.textView3);
+        textView4 = (TextView)rootview.findViewById(R.id.textView4);
+        textView5 = (TextView)rootview.findViewById(R.id.textView5);*/
+
+        layout_joystick = (RelativeLayout)rootview.findViewById(R.id.layout_joystick);
+
+        js = new JoyStickClass(getContext(), layout_joystick, R.drawable.ball);
+        js.setStickSize(150, 150);
+        js.setLayoutSize(500, 500);
+        js.setLayoutAlpha(255);
+        js.setStickAlpha(255);
+        js.setOffset(90);
+        js.setMinimumDistance(50);
+
+        layout_joystick.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                js.drawStick(arg1);
+                if(arg1.getAction() == MotionEvent.ACTION_DOWN
+                        || arg1.getAction() == MotionEvent.ACTION_MOVE) {
+                    /*textView1.setText("X : " + String.valueOf(js.getX()));
+                    textView2.setText("Y : " + String.valueOf(js.getY()));
+                    textView3.setText("Angle : " + String.valueOf(js.getAngle()));
+                    textView4.setText("Distance : " + String.valueOf(js.getDistance()));*/
+
+
+                } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
+                    /*textView1.setText("X :");
+                    textView2.setText("Y :");
+                    textView3.setText("Angle :");
+                    textView4.setText("Distance :");
+                    textView5.setText("Direction :");*/
+                }
+                return true;
+            }
+        });
+        //////////////////////////////////end joystick/////////////////////////
 
 
 
 
+
+/*
         //Create listeners
         joystickWindow.setOnTouchListener(new View.OnTouchListener() {
             float dx=0,dy=0,x=0,y=0;
@@ -171,7 +226,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         // Start loading the ad in the background.
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
 
         return rootview;
     }
@@ -212,7 +267,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
     }
 
     //Centers the position marker on the joystick graphic
-    public void centerJoystick(){
+   /* public void centerJoystick(){
         ImageView joystickPosition = (ImageView) rootview.findViewById(R.id.iv_joystick_position);
         int posXY[] = new int[2];
         rootview.findViewById(R.id.iv_joystick).getLocationInWindow(posXY);
@@ -221,7 +276,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
         joystickPosition.setX(centerX - (rootview.findViewById(R.id.iv_joystick_position).getWidth() / 2));
         joystickPosition.setY(centerY - getStatusBarHeight() - convertDpToPixel(60, rootview.getContext()) - (rootview.findViewById(R.id.iv_joystick_position).getHeight() / 2));
         //centerObjectToParent(rootview.findViewById(R.id.iv_joystick), 24);
-    }
+    }*/
 
     public void centerObjectToParent(View parent, View child){
         //ImageView joystickPosition = (ImageView) rootview.findViewById(R.id.iv_joystick_position);
