@@ -1,10 +1,16 @@
 package com.epicdecals.openslider;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,7 +36,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +46,12 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
 
     private BluetoothAdapter myBluetooth = null;
+    private ProgressDialog progress;
+    BluetoothSocket btSocket = null;
+    private boolean isBtConnected = false;
+    String btAddress = null;
+    //SPP UUID. This is the COM port of the BT device you are connecting to.
+    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +107,9 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(turnBTon,1);
         }
         ///////////////////////////END Check Device has BT
+        //Get address from storage
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        btAddress = sharedPref.getString("btDeviceAddress", "");
     }
 
 
@@ -123,8 +140,30 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_connect) {
+            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+            btAddress = sharedPref.getString("btDeviceAddress", "");
+            if(btAddress == "") {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.ERROR_GENERIC)
+                        .setMessage(R.string.ERROR_NO_DEVICE_SAVED)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            /*fragmentManager.beginTransaction()
+                                    .replace(R.id.content_main
+                                            , new Settings())
+                                    .addToBackStack(null)
+                                    .commit();*/
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }else {
+                new ConnectBT().execute(); //Call the class to connect
+            }
             return true;
+        } else if(id == R.id.action_disconnect) {
+            Disconnect();
         }
 
         return super.onOptionsItemSelected(item);
@@ -200,6 +239,85 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void Disconnect()
+    {
+        if (btSocket!=null) //If the btSocket is busy
+        {
+            try
+            {
+                btSocket.close(); //close connection
+            }
+            catch (IOException e)
+            { msg(getResources().getString(R.string.ERROR_DISCONNECT));}
+        }
+        msg(getResources().getString(R.string.BT_DISCONNECT_CONFIRMATION));
+    }
+
+    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
+    {
+        private boolean ConnectSuccess = true; //if it's here, it's almost connected
+
+        @Override
+        protected void onPreExecute() {
+            progress = ProgressDialog.show(MainActivity.this, (getResources().getString(R.string.CONNECTING) + "..."), (getResources().getString(R.string.PLEASE_WAIT) + "!"));  //show a progress dialog
+        }
+
+        @Override
+        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+        {
+            try {
+                if (btSocket == null || !isBtConnected) {
+                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
+                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(btAddress);//connects to the device's address and checks if it's available
+                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+                    btSocket.connect();//start connection
+                }
+            } catch (IOException e) {
+                ConnectSuccess = false;//if the try failed, you can check the exception here
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        {
+            super.onPostExecute(result);
+
+            if (!ConnectSuccess)
+            {
+                msg(getResources().getString(R.string.ERROR_CONNECT));
+                finish();
+            }
+            else
+            {
+                msg(getResources().getString(R.string.CONNECTED));
+                isBtConnected = true;
+            }
+            progress.dismiss();
+        }
+    }
+
+    //Write to BT
+    public void sendBT(String s){
+        if (btSocket!=null)
+        {
+            try
+            {
+                btSocket.getOutputStream().write(s.toString().getBytes());
+            }
+            catch (IOException e)
+            {
+                msg(getResources().getString(R.string.ERROR_SEND));
+            }
+        }
+    }
+
+    // fast way to call Toast
+    private void msg(String s)
+    {
+        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
     }
 
 //Button actions

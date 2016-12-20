@@ -3,12 +3,15 @@ package com.epicdecals.openslider;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +32,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.util.UUID;
+
 /**
  * Created by gdeeth on 11/13/2016.
  */
@@ -37,10 +42,18 @@ public class LiveControls extends android.support.v4.app.Fragment{
     AdView mAdView;
     View rootview;
 
+    /////////////////////////////Bluetooth///////////////////////
+    BluetoothAdapter myBluetooth = null;
+    BluetoothSocket btSocket = null;
+    private boolean isBtConnected = false;
+    //SPP UUID. This is the COM port of the BT device you are connecting to.
+    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    /////////////////////////////end Bluetooth///////////////////
+
     /////////////////////////////joystick////////////////////////
     RelativeLayout layout_joystick;
     ImageView image_joystick, image_border;
-    TextView textView1, textView2, textView3, textView4, textView5;
 
     JoyStickClass js;
     //////////////////////////////end joystick///////////////////
@@ -61,13 +74,19 @@ public class LiveControls extends android.support.v4.app.Fragment{
         SharedPreferences sharedPref = getContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         String btAddress = sharedPref.getString("btDeviceAddress", "");
 
+        //final FragmentManager fragmentManager = getFragmentManager();
+
         if(btAddress == "") {
             new AlertDialog.Builder(getContext())
                     .setTitle(R.string.ERROR_GENERIC)
                     .setMessage(R.string.ERROR_NO_DEVICE_SAVED)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
+                            /*fragmentManager.beginTransaction()
+                                    .replace(R.id.content_main
+                                            , new Settings())
+                                    .addToBackStack(null)
+                                    .commit();*/
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -77,12 +96,6 @@ public class LiveControls extends android.support.v4.app.Fragment{
 
 
         ////////////////////////////////joystick/////////////////////////
-        /*textView1 = (TextView)rootview.findViewById(R.id.textView1);
-        textView2 = (TextView)rootview.findViewById(R.id.textView2);
-        textView3 = (TextView)rootview.findViewById(R.id.textView3);
-        textView4 = (TextView)rootview.findViewById(R.id.textView4);
-        textView5 = (TextView)rootview.findViewById(R.id.textView5);*/
-
         layout_joystick = (RelativeLayout)rootview.findViewById(R.id.layout_joystick);
 
         js = new JoyStickClass(getContext(), layout_joystick, R.drawable.ball);
@@ -120,9 +133,9 @@ public class LiveControls extends android.support.v4.app.Fragment{
 
 
 
-/*
+
         //Create listeners
-        joystickWindow.setOnTouchListener(new View.OnTouchListener() {
+        /*joystickWindow.setOnTouchListener(new View.OnTouchListener() {
             float dx=0,dy=0,x=0,y=0;
 
             @Override
@@ -152,7 +165,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
                 }
                 return true;
             }
-        });
+        });*/
 
         sliderWindow.setOnTouchListener(new View.OnTouchListener() {
             float dx=0,dy=0,x=0,y=0;
@@ -184,6 +197,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
             public void onProgressChanged(SeekBar dampStart, int progress, boolean fromUser) {
                 TextView dampStartText = (TextView) rootview.findViewById(R.id.tv_damp_start);
                 dampStartText.setText(getResources().getString(R.string.live_damp_start) + " " + String.valueOf(progress));
+                ((MainActivity)getActivity()).sendBT("G1F" + String.valueOf(progress*100) + System.getProperty("line.separator"));
             }
 
             @Override
@@ -215,7 +229,7 @@ public class LiveControls extends android.support.v4.app.Fragment{
             }
         });
 
-        //Admob initialization
+        /*//Admob initialization
         // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
         // values/strings.xml.
         mAdView = (AdView) rootview.findViewById(R.id.ad_view);

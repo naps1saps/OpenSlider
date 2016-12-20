@@ -109,20 +109,5 @@ public class Settings extends android.support.v4.app.Fragment {
             Toast.makeText(getContext(), getResources().getString(R.string.SETTINGS_BT_ADDRESS_SAVED), Toast.LENGTH_LONG).show();
         }
     };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
 

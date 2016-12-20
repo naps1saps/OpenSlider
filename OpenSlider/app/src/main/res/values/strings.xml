@@ -9,6 +9,11 @@
     <string name="slide">Slide</string>
     <string name="return_center">Return</string>
     <string name="NONE">None</string>
+    <string name="CONNECT">Connect</string>
+    <string name="CONNECTING">Connecting</string>
+    <string name="CONNECTED">Connected</string>
+    <string name="DISCONNECT">Disconnect</string>
+    <string name="PLEASE_WAIT">Please Wait</string>
 
     <!--Navigation Window Strings-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -50,4 +55,11 @@
     <string name="error_no_bluetooth_adapter">Your device does not support Bluetooth.  Bluetooth is required for this app to work.</string>
     <string name="error_no_paired_devices">No paired devices were found.  Please open your device\'s bluetooth settings and pair a device.</string>
     <string name="ERROR_NO_DEVICE_SAVED">Open Slider does not know what Bluetooth device it should use.  Please select one in SETTINGS.</string>
+    <string name="ERROR_DISCONNECT">Error, could not disconnect Bluetooth.</string>
+    <string name="ERROR_CONNECT">Connection Failed. Is it a SPP Bluetooth? Try again.</string>
+    <string name="ERROR_SEND">Error sending command(s) to device.</string>
+
+    <!--Messages-->
+    <string name="BT_DISCONNECT_CONFIRMATION">Disconnected from device</string>
+
 </resources>
